@@ -21,7 +21,7 @@ void solve()
         {
             if (a[i] > 0)
             {
-                cout << ":- Try again.\n";
+                cout << ":-( Try again.\n";
                 return;
             }
 
