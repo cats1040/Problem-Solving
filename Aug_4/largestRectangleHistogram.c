@@ -1,3 +1,5 @@
+// Copyright 2025 Shreya Sharma
+
 /**
 * Problem Link:
 * https://leetcode.com/problems/largest-rectangle-in-histogram
@@ -6,7 +8,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../stack/stackArray.h"
+#include "../dataStructures/stack/stackArray.h"
 
 /**
  * Calculates the largest rectangular area in
@@ -18,7 +20,7 @@
  * @return The arae of the largest rectangle.
  */
 int largestRectangleArea(int *arr, int n) {
-    Stack *stack = (Stack *)malloc(sizeof(Stack));
+    Stack *stack = malloc(sizeof(Stack));
     initStackCapacity(stack, n);
 
     int ans = 0;
@@ -38,10 +40,10 @@ int largestRectangleArea(int *arr, int n) {
             int width = isEmpty(stack) ? i : i - peek(stack) - 1;
 
             if (ans < height * width) ans = height * width;
-        }   
+        }
 
         push(stack, i);
-    }    
+    }
 
     return ans;
 }
@@ -52,13 +54,13 @@ int largestRectangleArea(int *arr, int n) {
 void testLRA() {
     int arr1[] = {2, 1, 5, 6, 2, 3};
     assert(largestRectangleArea(arr1, 6) == 10);
-    
+
     int arr2[] = {2, 4};
     assert(largestRectangleArea(arr2, 2) == 4);
 
     int arr3[] = {1, 3, 1};
     assert(largestRectangleArea(arr3, 3) == 3);
-    
+
     int arr4[] = {1, 2, 1};
     assert(largestRectangleArea(arr4, 3) == 3);
 
@@ -72,18 +74,18 @@ void testLRA() {
     assert(largestRectangleArea(arr7, 4) == 20);
 
     int arr8[] = {3};
-    assert(largestRectangleArea(arr8, 1) == 3);    
+    assert(largestRectangleArea(arr8, 1) == 3);
 }
 
 int main() {
     testLRA();
 
-    int arr[] = {4,3,2,1};
-    int n = sizeof(arr)/sizeof(int);    
+    int arr[] = {4, 3, 2, 1};
+    int n = sizeof(arr) / sizeof(int);
 
     int ans = largestRectangleArea(arr, n);
 
-    printf("%i\n", ans);    
+    printf("%i\n", ans);
 
     return 0;
 }

@@ -1,5 +1,7 @@
-#ifndef STACK_H
-#define STACK_H
+// Copyright 2025 Shreya Sharma
+
+#ifndef AUG_4_STACK_ARRAY_STACK_H_
+#define AUG_4_STACK_ARRAY_STACK_H_
 
 #include <stdbool.h>
 
@@ -8,4 +10,4 @@ int pop();
 bool isEmpty();
 int size();
 
-#endif
+#endif  // AUG_4_STACK_ARRAY_STACK_H_

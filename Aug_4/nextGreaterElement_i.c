@@ -1,3 +1,5 @@
+// Copyright 2025 Shreya Sharma
+
 /**
  * Problem Link:
  * https://leetcode.com/problems/next-greater-element-i/description/
@@ -6,7 +8,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../stack/stackArray.c"
+#include "../dataStructures/stack/stackArray.h"
 
 /**
  * Finds the next greater element for each
@@ -19,7 +21,7 @@ int *nextGreater(int arr[], int n) {
     Stack stack;
     initStackCapacity(&stack, n);
 
-    int *ans = (int *)malloc(sizeof(int) * n);
+    int *ans = malloc(sizeof(int) * n);
 
     for (int i = n - 1; i >= 0; i--) {
         int idx = i;
@@ -27,16 +29,14 @@ int *nextGreater(int arr[], int n) {
         if (isEmpty(&stack)) {
             ans[idx] = -1;
             push(&stack, arr[idx]);
-        }
-        else {
+        } else {
             while (!isEmpty(&stack) && peek(&stack) <= arr[idx]) {
                 pop(&stack);
             }
 
             if (!isEmpty(&stack)) {
                 ans[idx] = peek(&stack);
-            }
-            else {
+            } else {
                 ans[idx] = -1;
             }
 
@@ -47,6 +47,9 @@ int *nextGreater(int arr[], int n) {
     return ans;
 }
 
+/**
+ * Printing array for debugging purposes
+ */
 void print(int *arr, int n) {
     for (int i = 0; i < n; i++) printf("%i ", arr[i]);
     printf("\n");
@@ -54,6 +57,9 @@ void print(int *arr, int n) {
     return;
 }
 
+/**
+ * Testing the nextGreater Function
+ */
 void testNG() {
     int arr1[] = {6, 5, 4, 3, 2, 1, 7};
     int expected1[] = {7, 7, 7, 7, 7, 7, -1};
@@ -75,7 +81,7 @@ void testNG() {
 int main() {
     testNG();
 
-    int arr[] = {6,5,4,3,2,1,7};
+    int arr[] = {6, 5, 4, 3, 2, 1, 7};
     int n = sizeof(arr)/sizeof(int);
 
     int *ans = nextGreater(arr, n);

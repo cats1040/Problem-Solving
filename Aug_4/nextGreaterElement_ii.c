@@ -1,3 +1,5 @@
+// Copyright 2025 Shreya Sharma
+
 /**
  * Problem Link:
  * https://leetcode.com/problems/next-greater-element-ii/description/
@@ -6,7 +8,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "../stack/stackArray.h"
+#include "../dataStructures/stack/stackArray.h"
 
 /**
  * Finds the next greater element for each
@@ -19,24 +21,22 @@ int *nextGreater(int arr[], int n) {
     Stack stack;
     initStackCapacity(&stack, n);
 
-    int *ans = (int *)malloc(sizeof(int) * n);
-    
+    int *ans = malloc(sizeof(int) * n);
+
     for (int i = (2 * n) - 1; i >= 0; i--) {
         int idx = (i + 1) % n;
 
         if (isEmpty(&stack)) {
             ans[idx] = -1;
             push(&stack, arr[idx]);
-        }
-        else {
+        } else {
             while (!isEmpty(&stack) && peek(&stack) <= arr[idx]) {
                 pop(&stack);
             }
-            
+
             if (!isEmpty(&stack)) {
                 ans[idx] = peek(&stack);
-            }
-            else {
+            } else {
                 ans[idx] = -1;
             }
 
@@ -73,14 +73,14 @@ void testNG() {
 }
 
 int main() {
-    testNG();    
+    testNG();
 
-    int arr[] = {6,5,4,3,2,1,7};
+    int arr[] = {6, 5, 4, 3, 2, 1, 7};
     int n = sizeof(arr)/sizeof(int);
 
-    int *ans = nextGreater(arr, n); 
+    int *ans = nextGreater(arr, n);
 
-    print(ans, n);   
+    print(ans, n);
 
     return 0;
 }

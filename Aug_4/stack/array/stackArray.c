@@ -1,3 +1,5 @@
+// Copyright 2025 Shreya Sharma
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>
@@ -13,7 +15,7 @@ void resizeArray(int newSize) {
     int *newArr = (int *)malloc(sizeof(int) * newSize);
 
     for (int i = 0; i < currSize; i++) {
-        newArr[i] = arr[i]; 
+        newArr[i] = arr[i];
     }
 
     free(arr);
@@ -95,6 +97,6 @@ void testStack() {
 int main() {
     arr = (int *)malloc(sizeof(int) * maxSize);
     testStack();
-	    
-    return 0;	
+
+    return 0;
 }

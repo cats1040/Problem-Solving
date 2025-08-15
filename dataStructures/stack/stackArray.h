@@ -1,7 +1,8 @@
 #ifndef STACKARRAY_H
 #define STACKARRAY_H
 
-typedef struct {
+typedef struct
+{
     int *arr;
     int top;
     int capacity;
