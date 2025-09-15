@@ -1,3 +1,4 @@
+import java.util.Comparator;
 
 /**
  * The MaxPriorityQueue class represents a priority
@@ -7,9 +8,10 @@
  * maximum key, cheecking if the priority queue is
  * empty and the number of elements in the queue.
  */
-public class MaxPriorityQueue<T extends Comparable<T>> {
+public class MaxPriorityQueue<T> {
   private T[] pq; // binary heap using 1-based indexing
   private int size; // number of elements in the queue
+  private Comparator<T> comparator;
 
   /**
    * Initializes and empty priority queue.
@@ -19,6 +21,13 @@ public class MaxPriorityQueue<T extends Comparable<T>> {
   public MaxPriorityQueue(int capacity) {
     this.pq = (T []) new Comparable[capacity + 1];
     this.size = 0;
+    this.comparator = null;
+  }
+
+  public MaxPriorityQueue(int capacity, Comparator<T> c) {
+    this.pq = (T []) new Comparable[capacity + 1];
+    this.size = 0;
+    this.comparator = c;
   }
 
   /**
@@ -49,7 +58,10 @@ public class MaxPriorityQueue<T extends Comparable<T>> {
 
   // Helper function
   private boolean less(int i, int j) {
-    return ((T) pq[i]).compareTo((T) pq[j]) < 0;
+    if (this.comparator != null) {
+      return comparator.compare(this.pq[i], this.pq[j]);
+    }
+    return ((Comparable<T>) this.pq[i]).compareTo((T) this.pq[j]) < 0;
   }
 
   /**
