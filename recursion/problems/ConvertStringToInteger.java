@@ -1,0 +1,83 @@
+import java.lang.Math;
+
+public class ConvertStringToInteger {
+    /**
+     * Convert a string to an integer without using built-in parsing functions.
+     * 
+     * Constraints / Rules:
+     * 1. You may not use built-in functions like Integer.parseInt() or similar.
+     * 2. You may not use any form of loops (for, while, do-while).
+     * 3. You may not use any form of conditional statements (if, switch, ternary
+     * operator).
+     * 4. Your function should work for negative numbers.
+     * 5. If the string is invalid, return 0.
+     * 6. Only characters that should be allowed in the string are numeric digits
+     * from '0'
+     * through '9', possibly preceded by a single minus sign '-' at the start if the
+     * number
+     * is negative. A string that contains any other characters in it is considered
+     * invalid.
+     * 7. You may assume that the string will not have leading or trailing
+     * whitespace.
+     * 8. You may assume that if the string contains valid characters, then it
+     * represents an integer
+     * that can be successfully stored in an int; that is, its value will not exceed
+     * 2^31.
+     * 9. If the empty string is passed, your function should return 0.
+     * 
+     * @param s - Input string representing an integer.
+     * @returns int - The integer value represented by the string.
+     */
+    public int convertStringToInteger(String s) throws Exception {
+        if (s.length() == 0) {
+            return 0;
+        }
+
+        int flag = 0;
+        int ans = solve(s, s.length() - 1, flag);
+
+        if (s.charAt(0) == '-')
+            ans *= -1;
+
+        return ans;
+    }
+
+    public int solve(String s, int i, int flag) {
+        if (s.length() < 0 || i < 0 || s.charAt(i) == '-') {
+            return 0;
+        }
+
+        if (!Character.isDigit(s.charAt(i))) {
+            flag = 1;
+            return 0;
+        }
+
+        double n = s.length();
+
+        int ans = (s.charAt(i) - '0') * ((int) (Math.pow(10.0, n - i - 1)));
+        int subAns = solve(s, i - 1, flag);
+
+        if (flag == 1) {
+            return 0;
+        }
+
+        ans += subAns;
+
+        return ans;
+    }
+
+    /**
+     * Main method for testing the ConvertStringToInteger class.
+     */
+    public static void main(String[] args) throws Exception {
+        ConvertStringToInteger converter = new ConvertStringToInteger();
+        String[] testStrings = { "123", "-456", "0", "789a", "", "-0", "2147483647", "-2147483648" };
+        int[] expectedResults = { 123, -456, 0, 0, 0, 0, 2147483647, -2147483648 };
+
+        for (int i = 0; i < testStrings.length; i++) {
+            int ans = converter.convertStringToInteger(testStrings[i]);
+            assert ans == expectedResults[i]
+                    : "Test case " + (i + 1) + " failed\nExpected: " + (expectedResults[i]) + ", Found: " + ans;
+        }
+    }
+}
