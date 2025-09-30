@@ -1,6 +1,7 @@
 public class ValidParenthesis {
   /**
-   * Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', 
+   * Given a string s containing just the characters '(', ')', '{', '}', '[' and
+   * ']',
    * determine if the input string is valid.
    *
    * An input string is valid if:
@@ -12,47 +13,35 @@ public class ValidParenthesis {
    * @returns boolean - True if the string is valid, false otherwise.
    */
   public boolean isValidRecursive(String s) {
-    boolean ans = solve(0, s, 0, 0, 0, -1);
-    return ans;
+    int ans = solve(0, s, s.length());
+    return ans == s.length();
   }
 
-  private boolean solve(int i, String s, int o1, int o2, int o3, int lastOpen) {
+  private int solve(int i, String s, int n) {
     if (i >= s.length()) {
-        if (o1 > 0 || o2 > 0 || o3 > 0) return false;
-        return true;
+      return i;
     }
 
     char ch = s.charAt(i);
-    int l = -1;
 
-    if (ch == '(') {
-        l = 1;
-        o1++;
-    }
-    else if (ch == '[') {
-        l = 2;
-        o2++;
-    }
-    else if (ch == '{') {
-        l = 3;
-        o3++;
-    }
-    else if (ch == ')') {
-        if (o1 <= 0 || (lastOpen != 1 && lastOpen != -1)) return false;
-        o1--;
-    }
-    else if (ch == ']') {
-        if (o2 <= 0 || (lastOpen != 2 && lastOpen != -1)) return false;
-        o2--;
-    }
-    else if (ch == '}') {
-        if (o3 <= 0 || (lastOpen != 3 && lastOpen != -1)) return false;
-        o3--;
+    if (ch == '(' || ch == '[' || ch == '{') {
+      int nxt = solve(i + 1, s, n);
+      char closing = '\0';
+      if (ch == '(') {
+        closing = ')';
+      } else if (ch == '[') {
+        closing = ']';
+      } else {
+        closing = '}';
+      }
+
+      if (nxt == -1 || nxt == n || s.charAt(nxt) != closing)
+        return -1;
+
+      return solve(nxt + 1, s, n);
     }
 
-    boolean ans = solve(i + 1, s, o1, o2, o3, l);
-
-    return ans;
+    return i;
   }
 
   /**
