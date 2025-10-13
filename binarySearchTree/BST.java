@@ -1,6 +1,9 @@
 // package binarySearchTree;
 
 public class BST<Key extends Comparable<Key>, Value> {
+  // why extends comparable and not implements comparable
+  // what is the difference?
+  
   private Node root;
 
   private class Node {
@@ -60,58 +63,39 @@ public class BST<Key extends Comparable<Key>, Value> {
   }
 
   public Key min() {
-    return min(root);
+    return min(root).key;
   }
 
-  private Key min(Node x) {
+  private Node min(Node x) {
     if (x == null) {
       return null;
     }
 
     if (x.left == null) {
-      return x.key;
+      return x;
     }
 
     return min(x.left);
   }
 
   public Key max() {
-    return max(root);
+    return max(root).key;
   }
 
-  private Key max(Node x) {
+  private Node max(Node x) {
     if (x == null) {
       return null;
     }
     
     if (x.right == null) {
-      return x.key;
+      return x;
     }
 
     return max(x.right);
   }
 
   public Key floor(Key key) {
-    Node locateKey = locate(root, key);
-    return floor(locateKey.left, key);
-  }
-
-  private Node locate(Node x, Key key) {
-    if (x == null) {
-      return null;
-    }
-
-    int cmp = key.compareTo(x.key);
-
-    if (cmp == 0) {
-      return x;
-    }
-    
-    if (cmp < 0) {
-      return locate(x.left, key);
-    }
-
-    return locate(x.right, key);
+    return floor(root, key);
   }
 
   private Key floor(Node x, Key key) {
@@ -119,16 +103,22 @@ public class BST<Key extends Comparable<Key>, Value> {
       return null;
     }
 
-    if (x.right == null) {
-      return x.right.key;
+    int cmp = key.compareTo(x.key);
+    
+    if (cmp == 0) {
+      return x.key; 
     }
 
-    return floor(x.right, key);
+    if (cmp < 0) {
+      return floor(x.left, key);
+    } else {
+      Key rightFloor = floor(x.right, key);
+      return (rightFloor != null) ? rightFloor : x.key;
+    }
   }
 
   public Key ceil(Key key) {
-    Node locateKey = locate(root, key);
-    return ceil(locateKey.right, key);
+    return ceil(root, key);
   }
 
   private Key ceil(Node x, Key key) {
@@ -136,11 +126,106 @@ public class BST<Key extends Comparable<Key>, Value> {
       return null;
     }
 
-    if (x.left == null) {
-      return x.left.key;
+    int cmp = key.compareTo(x.key);
+    
+    if (cmp == 0) {
+      return x.key; 
     }
 
-    return ceil(x.left, key);
+    if (cmp < 0) {
+      Key leftCeil = ceil(x.left, key);
+      if (leftCeil != null) return leftCeil;
+      return x.key;
+    } else {
+      return ceil(x.right, key);
+    }
+  }
+
+  public void delMin() {
+    root = delMin(root);
+  }
+
+  private Node delMin(Node x) {
+    if (x == null) {
+      return null;
+    }
+
+    if (x.left == null) {
+      return x.right;
+    }
+
+    x.left = delMin(x.left);
+
+    return x;
+  }
+
+  public void delMax() {
+    root = delMax(root);
+  }
+
+  private Node delMax(Node x) {
+    if (x == null) {
+      return null;
+    }
+
+    if (x.right == null) {
+      return x.left;
+    }
+
+    x.right = delMax(x.right);
+
+    return x;
+  }
+
+  public void delete(Key key) {
+    root = delete(root, key);
+  }
+
+  private Node delete(Node x, Key key) {
+    if (x == null) {
+      return null;
+    }
+
+    int cmp = key.compareTo(x.key);
+
+    if (cmp == 0) {
+      if (x.left == null) {
+        return x.right;
+      }
+      else {
+        /**
+         * get the maximum from
+         * the left, and replace
+         * the data with current,
+         * also remove it from its
+         * og position.
+         */
+        Node t = max(x.left); // get max
+        delMax(x.left); // del max
+        x.key = t.key;
+        x.value = t.value;
+      }
+    }
+    else if (cmp < 0) {
+      return delete(x.right, key);
+    }
+    else {
+      return delete(x.left, key);
+    }
+
+    return x;
+  }
+
+  public int rank(Key key) {
+    return -1; 
+  }
+
+  private int rank(Node x, Key key) {
+    if (x == null) {
+      return 0;
+    }
+
+    return -1;
   }
 
   public static void main(String[] args) {
@@ -157,9 +242,21 @@ public class BST<Key extends Comparable<Key>, Value> {
     assert(bst.get(9) == "F");
 
     bst.put(3, "P");
+
     assert(bst.get(3) == "P");
   
     assert(bst.min() == 2);
     assert(bst.max() == 65);
+
+    assert(bst.ceil(43) == 44);
+    assert(bst.floor(3) == 3);
+    
+    bst.delMax();
+    
+    assert(bst.get(65) == null);
+
+    bst.delete(2);
+    
+    assert(bst.get(2) == null);
   }
 }
