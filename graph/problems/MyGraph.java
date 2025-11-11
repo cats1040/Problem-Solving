@@ -1,11 +1,11 @@
 import java.util.*;
 
-class GraphDS {
+class Graph {
   Map<Integer, Set<Integer>> edgeMap;
   private List<String> tempPaths;
   private Set<Integer> visited;
 
-  GraphDS() {
+  Graph() {
     edgeMap = new HashMap<>();
   }
 
@@ -113,9 +113,9 @@ class GraphDS {
   }
 }
 
-public class GraphDS {
+public class MyGraph {
   public static void main(String[] args) {
-    GraphDS g = new GraphDS();
+    Graph g = new Graph();
 
     g.addEdge(1, 2);
     g.addEdge(2, 5);
