@@ -18,214 +18,178 @@ public class BST<Key extends Comparable<Key>, Value> {
     }
   }
 
-  public Value get(Key key) {
-    return get(root, key);
-  }
-
-  private Value get(Node x, Key key) {
-    if (x == null) return null;
-
-    int cmp = key.compareTo(x.key);
-
-    if (cmp == 0) return x.value;
-    if (cmp < 0) {
-      return get(x.left, key);
-    }
-    return get(x.right, key);
-  }
-
   public void put(Key key, Value value) {
     root = put(root, key, value);
+    return;
   }
 
-  private Node put(Node x, Key key, Value value) {
-    if (x == null) {
+  // helper function to put node in a bst
+  private Node put(Node node, Key key, Value value) {
+    if (node == null) {
       return new Node(key, value);
     }
 
-    int cmp = key.compareTo(x.key);
+    // compare
+    int cmp = key.compareTo(node.key);
 
-    if (cmp < 0) {
-      x.left = put(x.left, key, value);
+    if (cmp == -1) {
+      // left
+      node.left = put(node.left, key, value);
     }
     else if (cmp == 0) {
-     /**
-      * do not allow duplicate keys
-      * update the value
-      */
-      x.value = value;
+      // update value
+      node.value = value;
     }
     else {
-      x.right = put(x.right, key, value);
+      // right
+      node.right = put(node.right, key, value);
     }
 
-    return x;
+    return node;
   }
 
+  // get the value corresponding to the key
+  public Value get(Key key) {
+    Node node = root;
+      
+    while (node != null) {
+      int cmp = key.compareTo(node.key);
+
+      if (cmp == 0) {
+        // bingo !
+        return node.value;
+      }
+
+      if (cmp < 0) {
+        node = node.left;
+      }
+      else {
+        node = node.right;
+      }
+    }
+
+    return null;
+  }
+
+  // get the minimum key
   public Key min() {
-    return min(root).key;
-  }
+    Node node = root;
 
-  private Node min(Node x) {
-    if (x == null) {
-      return null;
+    if (node == null) return null;
+
+    while (node.left != null) {
+      node = node.left;
     }
 
-    if (x.left == null) {
-      return x;
-    }
-
-    return min(x.left);
+    return node.key;
   }
 
+  // get the maximum key
   public Key max() {
-    return max(root).key;
-  }
+    Node node = root;
 
-  private Node max(Node x) {
-    if (x == null) {
-      return null;
-    }
-    
-    if (x.right == null) {
-      return x;
+    if (node == null) return null;
+
+    while (node.right != null) {
+      node = node.right;
     }
 
-    return max(x.right);
+    return node.key;   
   }
 
+  // floor - largest key smaller than the given key
   public Key floor(Key key) {
     return floor(root, key);
   }
 
-  private Key floor(Node x, Key key) {
-    if (x == null) {
-      return null;
-    }
+  private Key floor(Node node, Key key) {
+    if (node == null) return null;
 
-    int cmp = key.compareTo(x.key);
-    
+    int cmp = key.compareTo(node.key);
+
     if (cmp == 0) {
-      return x.key; 
+      return node.key;
     }
 
     if (cmp < 0) {
-      return floor(x.left, key);
-    } else {
-      Key rightFloor = floor(x.right, key);
-      return (rightFloor != null) ? rightFloor : x.key;
+      return floor(node.left, key);
     }
+
+    Key right = floor(node.right, key);
+    if (right == null) right = node.key;
+    
+    return right;
   }
 
+  // ceil - smallest key larger than the given key
   public Key ceil(Key key) {
     return ceil(root, key);
   }
 
-  private Key ceil(Node x, Key key) {
-    if (x == null) {
-      return null;
-    }
+  private Key ceil (Node node, Key key) {
+    if (node == null) return null;
 
-    int cmp = key.compareTo(x.key);
-    
+    int cmp = key.compareTo(node.key);
+
     if (cmp == 0) {
-      return x.key; 
+      return node.key;
     }
 
-    if (cmp < 0) {
-      Key leftCeil = ceil(x.left, key);
-      if (leftCeil != null) return leftCeil;
-      return x.key;
-    } else {
-      return ceil(x.right, key);
+    if (cmp > 0) {
+      return ceil(node.right, key);
     }
+
+    Key left = ceil(node.left, key);
+    if (left == null) left = node.key;
+
+    return left;
   }
 
-  public void delMin() {
-    root = delMin(root);
-  }
-
-  private Node delMin(Node x) {
-    if (x == null) {
-      return null;
-    }
-
-    if (x.left == null) {
-      return x.right;
-    }
-
-    x.left = delMin(x.left);
-
-    return x;
-  }
-
-  public void delMax() {
-    root = delMax(root);
-  }
-
-  private Node delMax(Node x) {
-    if (x == null) {
-      return null;
-    }
-
-    if (x.right == null) {
-      return x.left;
-    }
-
-    x.right = delMax(x.right);
-
-    return x;
+  public int rank(Key key) {
+    return -1;
   }
 
   public void delete(Key key) {
     root = delete(root, key);
+    return;
   }
 
-  private Node delete(Node x, Key key) {
-    if (x == null) {
-      return null;
-    }
+  private Node delete(Node node, Key key) {
+    if (node == null) return null;
 
-    int cmp = key.compareTo(x.key);
+    int cmp = key.compareTo(node.key);
 
     if (cmp == 0) {
-      if (x.left == null) {
-        return x.right;
+      // YAYAY!!
+
+      // delete
+      // find the maximum from node.left
+      // or the minimum from node.right
+      // your choice :)
+
+      if (node.right == null) return node.left;
+      if (node.left == null) return node.right;
+
+      // Imma go with the first one
+      Node mini = node.right;
+      while (mini != null && mini.left != null) {
+        mini = mini.left;
       }
-      else {
-        /**
-         * get the maximum from
-         * the left, and replace
-         * the data with current,
-         * also remove it from its
-         * og position.
-         */
-        Node t = max(x.left); // get max
-        delMax(x.left); // del max
-        x.key = t.key;
-        x.value = t.value;
-      }
+
+      node.key = mini.key;
+      node.value = mini.value;
+      
+      // now recursively dlete the mini.key from node.right
+      node.right = delete(node.right, mini.key);
     }
     else if (cmp < 0) {
-      return delete(x.right, key);
+      node.left = delete(node.left, key);
     }
     else {
-      return delete(x.left, key);
+      node.right = delete(node.right, key);
     }
 
-    return x;
-  }
-
-  public int rank(Key key) {
-    return -1; 
-  }
-
-  private int rank(Node x, Key key) {
-    if (x == null) {
-      return 0;
-    }
-
-    return -1;
+    return node;
   }
 
   public static void main(String[] args) {
@@ -251,12 +215,18 @@ public class BST<Key extends Comparable<Key>, Value> {
     assert(bst.ceil(43) == 44);
     assert(bst.floor(3) == 3);
     
-    bst.delMax();
-    
-    assert(bst.get(65) == null);
+    assert(bst.get(65) == "C");
 
     bst.delete(2);
     
     assert(bst.get(2) == null);
+
+    BST<Integer, Integer> bst1 = new BST<>();
+    bst1.put(50, 50);
+    bst1.put(30, 50);
+    bst1.put(20, 50);
+    bst1.put(40, 50);
+
+    System.out.println(bst1.floor(31));
   }
 }
