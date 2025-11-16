@@ -11,11 +11,17 @@ public class BST<Key extends Comparable<Key>, Value> {
     Value value;
     Node left;
     Node right;
+    int size; // number of nodes below this node
 
     Node(Key key, Value value) {
       this.key = key;
       this.value = value;
+      size = 1;
     }
+  }
+
+  private int getSize(Node node) {
+    return node == null ? 0 : node.size;
   }
 
   public void put(Key key, Value value) {
@@ -44,6 +50,8 @@ public class BST<Key extends Comparable<Key>, Value> {
       // right
       node.right = put(node.right, key, value);
     }
+
+    node.size = 1 + getSize(node.left) + getSize(node.right);
 
     return node;
   }
@@ -146,7 +154,25 @@ public class BST<Key extends Comparable<Key>, Value> {
   }
 
   public int rank(Key key) {
-    return -1;
+    return rank(root, key);
+  }
+
+  private int rank(Node node, Key key) {
+    if (node == null) {
+      return 0;
+    }
+
+    int cmp = key.compareTo(node.key);
+
+    if (cmp == 0) {
+      return getSize(node.left) + 1;
+    }
+    
+    if (cmp < 0) {
+      return rank(node.left, key);    
+    }
+    
+    return 1 + getSize(node.left) + rank(node.right, key);
   }
 
   public void delete(Key key) {
@@ -188,6 +214,8 @@ public class BST<Key extends Comparable<Key>, Value> {
     else {
       node.right = delete(node.right, key);
     }
+
+    node.size = 1 + getSize(node.left) + getSize(node.right);
 
     return node;
   }
