@@ -54,7 +54,10 @@ public class ShortestPath {
 
                 for (int i = 0; i < N; i++) {
                     if (newNode != i && this.adj[newNode][i] != null) {
-                        q.add(new QueueNode(i, this.adj[newNode][i] + qNode.currDistance));
+                        int newDistance = this.adj[newNode][i] + qNode.currDistance;
+                        if (shortestDistances[i] == null || newDistance < shortestDistances[i]) {
+                            q.add(new QueueNode(i, this.adj[newNode][i] + qNode.currDistance));
+                        }
                     }
                 }
             }
